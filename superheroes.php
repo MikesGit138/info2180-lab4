@@ -62,7 +62,29 @@ $superheroes = [
       "biography" => "Notably powerful, Wanda Maximoff has fought both against and with the Avengers, attempting to hone her abilities and do what she believes is right to help the world.",
   ], 
 ];
+function sanitize($string) {
+    return htmlspecialchars(trim($string), ENT_QUOTES, 'UTF-8');
+}
 
+if (isset($_GET['query']) && !empty($_GET['query'])) {
+    $query = sanitize($_GET['query']);
+    $found = false;
+
+    foreach ($superheroes as $superhero) {
+        if (strtolower($superhero['name']) === strtolower($query) || strtolower($superhero['alias']) === strtolower($query)) {
+            echo "<h3>" . $superhero['alias'] . "</h3>";
+            echo "<h4>" . $superhero['name'] . "</h4>";
+            echo "<p>" . $superhero['biography'] . "</p>";
+            $found = true;
+            break;
+        }
+    }
+
+    if (!$found) {
+        echo "<p>Superhero not found</p>";
+    }
+    return;
+} 
 ?>
 
 <ul>
